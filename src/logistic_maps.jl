@@ -1,4 +1,4 @@
-"Module containing fun"
+"Module containing functions to treat discrete nonlinear dynamical systems. By Marcello Fonda"
 module LogisticMaps
 
 using Plots
@@ -15,6 +15,7 @@ maps = Dict(
     "tent" => (x,r) -> x ≤ .5 ? 2r * x : 2r - 2r * x,
     "sine" => (x,r) -> r * sin( π * x ),
     "bimodal" => (x,r) -> x < .5 ? 4r * (1-2x)*2x : 4r * (1-(2x-1))*(2x-1),
+    "m_like" => (x,r) -> 3.8 * r * (.1 + abs(x - 0.5)) * (1 - (2x - 1)^2)#(x,r) -> 2.99r * (1.1 - sin(π * x)) * (1 - (2x - 1)^2)
 )
 
 """
@@ -27,6 +28,8 @@ derivatives = Dict(
     "tent" => (x,r) -> x < .5 ? 2r : -2r,
     "sine" => (x,r) -> r * π * cos(π * x),
     "bimodal" => (x,r) -> x < 0.5 ? -16r*x + 8(1 - 2x)r : 8(2 - 2x)r - 8(2x - 1)r,
+    "m_like" => (x,r) -> x > 0.5 ? 3.8 * r * (1 * (1 - (2x - 1)^2) - 8 * (2x - 1) * (.1 + x - 0.5)) :
+    3.8 * r * (-1 * (1 - (2x - 1)^2) - 8 * (2x - 1) * (.1 + 0.5 - x))#x < 0.5 ? 3.8 * r * (1 * (1 - (2x - 1)^2) - 8 * (2x - 1) * (.1 + 0.5 - x)) : 3.8 * r * (1 * (1 - (2x - 1)^2) - 8 * (2x - 1) * (.1 + x - 0.5))#2.99r * ((-cos(π * x) * π) * (1 - (2x - 1)^2) + (1.1 - sin(π * x)) * -8 * (2x - 1))
 )
 
 """
