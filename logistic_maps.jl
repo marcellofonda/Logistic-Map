@@ -3,7 +3,7 @@ module LogisticMaps
 
 using Plots
 
-export logistic_map, draw_cobweb, find_period, find_fixed_points, fixed_points_as_tuples, Lyapunov_exponent, Lyapunov_average
+export logistic_map, draw_cobweb, find_period, find_fixed_points, fixed_points_as_tuples, Lyapunov_average
 
 """
 Dictionary containing all the available maps.
@@ -14,7 +14,7 @@ maps = Dict(
     "logistic" => (x,r) -> 4r * (1-x)x,
     "tent" => (x,r) -> x ≤ .5 ? 2r * x : 2r - 2r * x,
     "sine" => (x,r) -> r * sin( π * x ),
-    "bimodal" => (x,r) -> x < .5 ? 4r * (1-2x)*2x : 4r * (1-(2x-1))*(2x-1)
+    "bimodal" => (x,r) -> x < .5 ? 4r * (1-2x)*2x : 4r * (1-(2x-1))*(2x-1),
 )
 
 """
@@ -25,7 +25,8 @@ Implemented keys: "logistic", "tent", "sine".
 derivatives = Dict(
     "logistic" => (x,r) -> 4r * (1 - 2x),
     "tent" => (x,r) -> x < .5 ? 2r : -2r,
-    "sine" => (x,r) -> r * π * cos(π * x)
+    "sine" => (x,r) -> r * π * cos(π * x),
+    "bimodal" => (x,r) -> x < 0.5 ? -16r*x + 8(1 - 2x)r : 8(2 - 2x)r - 8(2x - 1)r,
 )
 
 """
@@ -156,7 +157,7 @@ function numerical_Lyapunov_exponent(r, N_steps, x₀; start=1, map="logistic", 
     # Stagger and divide difference vector
     df_ratio = df[2:end] ./ df[1:end-1]
     # Obtain logarithm and Lyapunov exponent
-    sum(log.(abs.(df_ratio))) / length(df_log)
+    sum(log.(abs.(df_ratio))) / length(df_ratio)
 end
 
 """
